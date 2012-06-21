@@ -25,8 +25,8 @@ app.configure(function () {
 
 app.configure('development', function () {
 	app.use(express.errorHandler({
-			dumpExceptions : true,
-			showStack : false
+			dumpExceptions : false,
+			showStack : true
 		}));
 });
 
@@ -35,15 +35,21 @@ app.configure('production', function () {
 });
 
 // Routes
-
+// Front End
 app.get('/', routes.index);
 app.get(/^\/(?:page\/(\d+))?$/, posts.page);
 app.get(/^\/(\d{4})\/(\d{2})\/(\d{2})\/([a-zA-Z-0-9]+)\/?/, posts.post);
 
-//error handler
-app.all('*', function (req, res, next) {
-	next(new routes.NotFound);
-});
+// Administration
+app.get('/admin', admin.index);
+app.get('/admin/login',admin.login);
+app.post('/admin/login',admin.loginPost);
+app.get('/admin/logout',admin.logout);
+
+// error handler
+//app.all('*', function (req, res, next) {
+//	next(new routes.NotFound);
+//});
 
 // 404 Handler
 app.error(function (err, req, res, next) {
@@ -57,10 +63,10 @@ app.error(function (err, req, res, next) {
 });
 
 //500 handler
-app.error(function(err, req, res){
-  res.render('500', {
-     error: err
-  });
+app.error(function (err, req, res) {
+	res.render('500', {
+		error : err
+	});
 });
 
 app.listen(3000, function () {
