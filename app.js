@@ -6,11 +6,16 @@
 var express = require('express'),
 routes = require('./routes'),
 admin = require('./admin'),
-posts = require('./posts');
+posts = require('./posts'),
+model = require('./model');
 
 var middleware = ('./middleware');
 
 var app = module.exports = express.createServer();
+
+// Mongoose Connection
+var mongoose = require('mongoose');
+var db = mongoose.connect('mongodb://localhost/gmzblog');
 
 // Configuration
 
@@ -41,10 +46,11 @@ app.get(/^\/(?:page\/(\d+))?$/, posts.page);
 app.get(/^\/(\d{4})\/(\d{2})\/(\d{2})\/([a-zA-Z-0-9]+)\/?/, posts.post);
 
 // Administration
-app.get('/admin', admin.index);
-app.get('/admin/login',admin.login);
-app.post('/admin/login',admin.loginPost);
-app.get('/admin/logout',admin.logout);
+app.get('/admin', admin.require_login, admin.index);
+app.get('/admin/login', admin.require_login, admin.login);
+app.post('/admin/login', admin.require_login, admin.loginPost);
+app.get('/admin/logout', admin.require_login, admin.logout);
+app.get('/admin/dashboard', admin.require_login, admin.dashboard);
 
 // error handler
 //app.all('*', function (req, res, next) {
