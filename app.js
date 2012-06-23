@@ -13,9 +13,10 @@ var middleware = ('./middleware');
 
 var app = module.exports = express.createServer();
 
-// Mongoose Connection
-var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost/gmzblog');
+var articleProvider = model.ArticleProvider;
+
+// memory database
+
 
 // Configuration
 
@@ -38,6 +39,9 @@ app.configure('development', function () {
 app.configure('production', function () {
 	app.use(express.errorHandler());
 });
+
+// mongodb
+var articleProvider= new ArticleProvider('localhost',27017);
 
 // Routes
 // Front End

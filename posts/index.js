@@ -2,15 +2,25 @@
 /*
  * POSTS router
  */
+var articleProvider = require('../model').ArticleProvider;
 
 exports.page = function (req, res) {
-	res.render('index', {
-		title : 'Pages Here!!!'
-	})
+	
+	articleProvider.findAll(function (error, docs) {
+		//res.send(docs);
+		res.render('index.jade', {
+			title : 'Pages',
+			articles : docs
+		});
+	});
 };
 
-exports.post = function (req, res) {
-	res.render('index', {
-		title : 'Posts Here!!!!'
-	})
+exports.post = function (req, res){
+	articleProvider.findAll(function (error, docs) {
+		//res.send(docs);
+		res.render('index.jade', {
+			title : 'Pages',
+			articles : docs
+		});
+	});
 };

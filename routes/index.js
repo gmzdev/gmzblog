@@ -3,12 +3,20 @@
  * ROUTES router.
  */
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Main Page Here' })
+var articleProvider = require('../model').ArticleProvider;
+var articleProvider= new ArticleProvider('localhost',27017);
+
+exports.index = function (req, res) {
+	articleProvider.findAll(function (error, docs) {
+		res.render('index.jade', {
+			title : 'Pages',
+			articles : docs
+		});
+	});
 };
 
 // Error handling
-var NotFound = exports.NotFound = function(msg){
+var NotFound = exports.NotFound = function (msg) {
 	this.name = 'NotFound';
 	Error.call(this.msg);
 	Error.captureStackTrace(this, arguments.callee);
